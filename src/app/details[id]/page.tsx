@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { PokemonCard } from "@/src/components/PokeCard/page";
