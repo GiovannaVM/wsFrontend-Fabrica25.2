@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #4d69;
+  --bg:#4d6967;
   --bg-dark: #4d6967;
   --screen: #ff00ff;
   --screen-glow: #00ffff;
@@ -28,6 +28,7 @@ html, body, #__next {
 * {
   box-sizing: border-box;
 }
+
 
 .container {
   max-width: 1200px;
@@ -109,7 +110,7 @@ h1 {
 }
 
 .card {
-  background: #11111f;
+  
   border: 2px solid var(--screen);
   padding: 16px;
   border-radius: var(--radius);
@@ -120,6 +121,7 @@ h1 {
   justify-content: space-between;
   box-shadow: 0 0 12px var(--screen-glow), inset 0 0 8px var(--screen);
   transition: 0.3s;
+  
 }
 
 .card:hover {
@@ -129,7 +131,7 @@ h1 {
 }
 
 .poke-img {
-  width: 100px;
+  width: 120px;
   height: 100px;
   margin: 0 auto 12px;
   object-fit: contain;

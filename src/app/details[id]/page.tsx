@@ -64,7 +64,7 @@ export default async function PokemonDetalhes({ params }: PokemonDetalhesProps) 
       </section>
 
       <footer className="mt-6 text-center text-sm text-gray-500">
-        Dados fornecidos pela PokéAPI
+        Dados da PokéAPI
       </footer>
     </main>
   );

@@ -43,7 +43,7 @@ export default function Home() {
     name.charAt(0).toUpperCase() + name.slice(1);
 
   return (
-    <main className="container">
+    <main className="">
       <Header>
         <div className="searchbar" role="search">
           <input

@@ -21,11 +21,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className="bg-gray-100 text-gray-900 flex flex-col min-h-screen">
-        <Header />
+        
         <main className="flex-grow container mx-auto px-4 py-6">
           {children}
         </main>
-        <Footer />
+        
       </body>
     </html>
   );
