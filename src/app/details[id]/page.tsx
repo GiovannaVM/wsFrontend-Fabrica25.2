@@ -1,71 +1,108 @@
-import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { PokemonCard } from "@/src/components/PokeCard/page";
 
-interface PokemonDetalhesProps {
-  params: { id: string };
+
+interface Pokemon {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+  types: { type: { name: string } }[];
 }
 
-export default async function PokemonDetalhes({ params }: PokemonDetalhesProps) {
-  const { id } = params;
+interface PokemonListItem {
+  name: string;
+  url: string;
+}
 
-  // usando fetch ao invés de axios
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  if (!res.ok) throw new Error("Falha ao carregar Pokémon");
-  const pokemon = await res.json();
+interface PokemonListResponse {
+  results: PokemonListItem[];
+}
+
+export default function Pokedex() {
+  const [pokemon, setPokemon] = useState<Pokemon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const getPoke = async () => {
+    try {
+      const response = await axios.get<PokemonListResponse>(
+        "https://pokeapi.co/api/v2/pokemon?limit=500"
+      );
+
+      // Buscar detalhes de cada Pokémon
+      const results = await Promise.all(
+        response.data.results.map(async (poke) => {
+          const res = await axios.get<Pokemon>(poke.url);
+          return res.data;
+        })
+      );
+
+      setPokemon(results);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getPoke();
+  }, []);
+
+  const filteredPokemon = pokemon.filter((poke) =>
+    poke.name.toLowerCase().includes(search.trim().toLowerCase())
+  );
 
   return (
-    <main className="max-w-3xl mx-auto px-6 py-10">
-      <header className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold capitalize">{pokemon.name}</h1>
-        <Link
-          href="/"
-          className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
-        >
-          ⬅ Voltar
-        </Link>
-      </header>
+    <main style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Pokédex</h1>
 
-      <section className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center">
-        <Image
-          src={pokemon.sprites.other["official-artwork"].front_default}
-          alt={pokemon.name}
-          width={200}
-          height={200}
-          className="mb-4"
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Pesquisar Pokémon..."
+          value={search}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+            padding: "10px",
+            fontSize: "16px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+          }}
         />
+      </div>
 
-        <h2 className="text-xl font-semibold capitalize mb-2">
-          {pokemon.name} <span className="text-gray-500">#{pokemon.id}</span>
-        </h2>
-
-        <div className="grid grid-cols-2 gap-4 mt-4 text-center">
-          <div className="bg-gray-100 rounded-lg p-3">
-            <p className="font-medium">Tipo(s)</p>
-            <p className="capitalize">
-              {pokemon.types.map((t: any) => t.type.name).join(", ")}
+      {loading ? (
+        <p style={{ textAlign: "center" }}>Carregando Pokémons...</p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {filteredPokemon.length > 0 ? (
+            filteredPokemon.map((poke) => (
+              <PokemonCard
+                key={poke.id}
+                name={poke.name}
+                id={poke.id}
+                isGrid={false}
+              />
+            ))
+          ) : (
+            <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+              Nenhum Pokémon encontrado!
             </p>
-          </div>
-
-          <div className="bg-gray-100 rounded-lg p-3">
-            <p className="font-medium">Peso</p>
-            <p>{pokemon.weight / 10} kg</p>
-          </div>
-
-          <div className="bg-gray-100 rounded-lg p-3">
-            <p className="font-medium">Altura</p>
-            <p>{pokemon.height / 10} m</p>
-          </div>
-
-          <div className="bg-gray-100 rounded-lg p-3">
-            <p className="font-medium">XP Base</p>
-            <p>{pokemon.base_experience}</p>
-          </div>
+          )}
         </div>
-      </section>
-
-      <footer className="mt-6 text-center text-sm text-gray-500">
-        Dados da PokéAPI
-      </footer>
+      )}
     </main>
   );
 }

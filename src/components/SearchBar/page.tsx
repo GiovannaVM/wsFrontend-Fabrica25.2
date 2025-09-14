@@ -3,20 +3,32 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { PokemonCard } from "../PokeCard/page";
 
-
+interface Pokemon {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+  types: { type: { name: string } }[];
+}
 
 export default function Pokedex() {
-  const [pokemon, setPokemon] = useState<any[]>([]);
+  const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   const getPoke = async () => {
     try {
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=500");
+
       const results = await Promise.all(
-        response.data.results.map((poke: any) => axios.get(poke.url))
+        response.data.results.map(async (poke: { name: string; url: string }) => {
+          const res = await axios.get<Pokemon>(poke.url);
+          return res.data;
+        })
       );
-      setPokemon(results.map((res) => res.data));
+
+      setPokemon(results);
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,7 +53,7 @@ export default function Pokedex() {
           type="text"
           placeholder="Pesquisar Pokémon..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           style={{
             width: "100%",
             maxWidth: "400px",
@@ -68,7 +80,9 @@ export default function Pokedex() {
               <PokemonCard
                 key={poke.id}
                 name={poke.name}
-                id={poke.id} isGrid={false}              />
+                id={poke.id}
+                isGrid={false}
+              />
             ))
           ) : (
             <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
@@ -80,3 +94,4 @@ export default function Pokedex() {
     </main>
   );
 }
+
