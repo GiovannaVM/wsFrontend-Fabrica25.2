@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #4d69;
+  --bg-dark: #4d6967;
+  --screen: #ff00ff;
+  --screen-glow: #00ffff;
+  --accent: #fffb00;
+  --accent-red: #ff3c78;
+  --muted: #8888aa;
+
+  --fs-base: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 22px;
+  --radius: 20px;
+  --gap: 18px;
+  --container-padding: 24px;
+}
+
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-dark) 100%);
+  color: var(--accent);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+header, footer {
+  background: #0f0f1f;
+  border: 2px solid var(--screen-glow);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 20px var(--screen-glow);
+}
+
+h1 {
+  font-size: var(--fs-xl);
+  color: var(--screen);
+  text-shadow: 0 0 8px var(--screen), 0 0 16px var(--screen-glow);
+  margin: 0;
+}
+
+.searchbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  background: #11111f;
+  border: 2px solid var(--screen);
+  padding: 10px;
+  border-radius: var(--radius);
+  box-shadow: 0 0 12px var(--screen-glow);
+}
+
+.searchbar input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #1a1a2f;
+  color: var(--accent);
+  font-size: var(--fs-base);
+  outline: none;
+  box-shadow: inset 0 0 6px var(--screen);
+  transition: 0.3s;
+}
+
+.searchbar input:focus {
+  box-shadow: 0 0 10px var(--screen-glow);
+}
+
+.searchbar button {
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  background: var(--accent-red);
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 0 8px var(--accent-red);
+  transition: 0.3s;
+}
+
+.searchbar button:hover {
+  background: #ff6aa3;
+  box-shadow: 0 0 12px var(--accent-red);
+  transform: translateY(-2px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--gap);
+  margin-top: 24px;
+}
+
+.card {
+  background: #11111f;
+  border: 2px solid var(--screen);
+  padding: 16px;
+  border-radius: var(--radius);
+  text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 0 12px var(--screen-glow), inset 0 0 8px var(--screen);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 0 24px var(--screen-glow), inset 0 0 16px var(--screen);
+  border-color: var(--accent);
+}
+
+.poke-img {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 12px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 6px var(--screen));
+}
+
+.card-name {
+  text-transform: capitalize;
+  font-size: var(--fs-lg);
+  font-weight: bold;
+  color: var(--screen);
+  text-shadow: 0 0 6px var(--screen-glow);
+}
+
+.idtag {
+  font-size: var(--fs-base);
+  font-weight: bold;
+  color: var(--muted);
+}
+
+.no-results {
+  padding: 40px;
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.btnLink {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(45deg, var(--screen), var(--accent));
+  color: #0a0a0f;
+  font-weight: bold;
+  box-shadow: 0 0 8px var(--screen-glow);
+  transition: 0.3s;
+}
+
+.btnLink:hover {
+  background: linear-gradient(45deg, var(--accent), var(--screen-glow));
+  color: #fff;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 16px var(--screen-glow), 0 0 8px var(--accent);
+}
